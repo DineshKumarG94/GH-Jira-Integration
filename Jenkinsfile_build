@@ -1,0 +1,31 @@
+pipeline {
+  agent any
+    stages {
+        stage('source code checkout') {
+            steps {
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: 'DSA-2338-test-GH-Jira-Integration']],
+                    userRemoteConfigs: [[
+                        credentialsId: 'DineshKumarG94',
+                        url: 'https://github.com/DineshKumarG94/GH-Jira-Integration.git'
+                    ]]
+                ])
+            }
+        }
+
+        stage('build') {
+            steps {
+                echo "cloned the repo upon commit"
+                echo "testing the integration"
+            }
+        }
+    }
+
+    post {
+        always {
+          jiraSendBuildInfo()
+            cleanWs()
+        }
+    }
+}
