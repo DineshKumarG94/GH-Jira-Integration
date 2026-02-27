@@ -1,5 +1,12 @@
 pipeline {
   agent any
+ parameters {
+         choice(
+            name: 'ENVIRONMENT', 
+            choices: "DEV\nSIT\nUAT", 
+            description: "Select Non-prod target environment"
+        )
+}
     stages {
         stage('source code checkout') {
             steps {
@@ -21,9 +28,11 @@ pipeline {
     }
 
     post {
-        always {
-            cleanWs()
-            jiraSendDeploymentInfo environmentId: 'stg-1', environmentName: 'stg-1', environmentType: 'staging'
+        success {
+            jiraSendDeploymentInfo environmentId: "${params.ENVIRONMENT}", environmentName: "${params.ENVIRONMENT}", environmentType: "${params.ENVIRONMENT}"
         }
+        always {
+         cleanWs()
     }
+}
 }
