@@ -13,7 +13,7 @@ pipeline {
                 ])
             }
         }
-        stage('test-deploy') {
+        stage('deploy to stage') {
             steps {
                 echo "Deploy is success the repo upon commit"
             }
