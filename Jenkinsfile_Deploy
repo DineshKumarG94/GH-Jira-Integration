@@ -23,6 +23,7 @@ pipeline {
     post {
         always {
             cleanWs()
+            jiraSendDeploymentInfo environmentId: 'stg-1', environmentName: 'stg-1', environmentType: 'staging'
         }
     }
 }
