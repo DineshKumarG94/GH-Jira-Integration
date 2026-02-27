@@ -13,8 +13,7 @@ pipeline {
                 ])
             }
         }
-
-        stage('build') {
+        stage('testing') {
             steps {
                 echo "cloned the repo upon commit"
                 echo "testing the integration"
