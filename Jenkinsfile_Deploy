@@ -1,0 +1,38 @@
+pipeline {
+  agent any
+ parameters {
+         choice(
+            name: 'ENVIRONMENT', 
+            choices: "DEV\nSIT\nUAT", 
+            description: "Select Non-prod target environment"
+        )
+}
+    stages {
+        stage('source code checkout') {
+            steps {
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: 'DSA-2338-test-GH-Jira-Integration']],
+                    userRemoteConfigs: [[
+                        credentialsId: 'DineshKumarG94',
+                        url: 'https://github.com/DineshKumarG94/GH-Jira-Integration.git'
+                    ]]
+                ])
+            }
+        }
+        stage('deploy to stage') {
+            steps {
+                echo "Deploy is success the repo upon commit"
+            }
+        }
+    }
+
+    post {
+        success {
+            jiraSendDeploymentInfo environmentId: "${params.ENVIRONMENT}", environmentName: "${params.ENVIRONMENT}", environmentType: "${params.ENVIRONMENT}"
+        }
+        always {
+         cleanWs()
+    }
+}
+}
